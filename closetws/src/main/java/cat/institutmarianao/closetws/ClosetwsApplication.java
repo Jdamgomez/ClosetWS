@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class ClosetwsApplication {
+	public static final String DATE_PATTERN = "dd/MM/yyyy";
 	@Bean
 	protected PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
