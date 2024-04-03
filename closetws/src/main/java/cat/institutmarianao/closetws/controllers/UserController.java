@@ -62,11 +62,8 @@ public class UserController {
 	@ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json")} , description = "Users retrieved ok")
 	/**/
 	@GetMapping(value = "/find/all")
-	public List<User> findAll( 
-			@RequestParam(value = "fullName", required = false) String fullName) {
-
+	public List<User> findAll( @RequestParam(value = "fullName", required = false) String fullName) {
 		return userService.findAll( fullName);
-
 	}
 
 	/* Swagger */

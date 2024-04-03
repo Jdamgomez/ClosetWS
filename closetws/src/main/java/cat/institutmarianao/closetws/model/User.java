@@ -1,5 +1,6 @@
 package cat.institutmarianao.closetws.model;
 
+import java.util.Base64;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -73,4 +74,12 @@ public class User {
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "profile_picture", columnDefinition = "BLOB")
 	private byte[] profilePicture;
+
+	public String getBase64Image() {
+		return Base64.getEncoder().encodeToString(profilePicture);
+	}
+	
+	public void setBase64Image(String b64Image) {
+		this.profilePicture=Base64.getDecoder().decode(b64Image);
+	}
 }
