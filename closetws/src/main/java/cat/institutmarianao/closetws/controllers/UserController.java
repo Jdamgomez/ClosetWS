@@ -23,8 +23,10 @@ import cat.institutmarianao.closetws.services.UserService;
 import cat.institutmarianao.closetws.validation.groups.OnUserCreate;
 import cat.institutmarianao.closetws.validation.groups.OnUserUpdate;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -49,7 +51,7 @@ public class UserController {
 	@io.swagger.v3.oas.annotations.parameters.RequestBody(content = {
 			@Content(mediaType = "application/json", examples = {
 					@ExampleObject(value = "{\"username\":\"string\",\"password\":\"string\"}") }) })
-	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json")},  description = "User authenticated ok")
+	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))},  description = "User authenticated ok")
 	@ApiResponse(responseCode = "404", content = { @Content(mediaType = "application/json") }, description = "Resource not found")
 	/**/
 	@PostMapping("/authenticate")
@@ -59,7 +61,9 @@ public class UserController {
 
 	/* Swagger */
 	@Operation(summary = "Find all users")
-	@ApiResponse(responseCode = "200", content = {@Content(mediaType = "application/json")} , description = "Users retrieved ok")
+	@ApiResponse(responseCode = "200", content = {
+			@Content(mediaType = "application/json",array= @ArraySchema(schema = @Schema(
+					implementation = User.class)))} , description = "Users retrieved ok")
 	/**/
 	@GetMapping(value = "/find/all")
 	public List<User> findAll( @RequestParam(value = "fullName", required = false) String fullName) {
@@ -68,7 +72,7 @@ public class UserController {
 
 	/* Swagger */
 	@Operation(summary = "Get user by id")
-	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json")}, description = "User retrieved ok")
+	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = User.class))}, description = "User retrieved ok")
 	@ApiResponse(responseCode = "404", content = {@Content(mediaType = "application/json") }, description = "Resource not found")
 	/**/
 	@GetMapping("/get/by/username/{username}") 
@@ -79,8 +83,8 @@ public class UserController {
 	/* Swagger */
 	@Operation(summary = "Save a user")
 	@io.swagger.v3.oas.annotations.parameters.RequestBody(content = {
-			@Content(mediaType = "application/json")})
-	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json") }, description = "User saved ok")
+			@Content(mediaType = "application/json",schema = @Schema(implementation = User.class))})
+	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = User.class)) }, description = "User saved ok")
 	/**/
 	@PostMapping("/save")
 	@Validated(OnUserCreate.class)

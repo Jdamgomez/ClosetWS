@@ -35,6 +35,7 @@ public class User {
 	public static final int MIN_USERNAME = 4;
 	public static final int MAX_USERNAME = 25;
 	public static final int MIN_PASSWORD = 5;
+	public static final int MAX_PHONE=15;
 	public static final int MIN_FULL_NAME = 3;
 	public static final int MAX_FULL_NAME = 100;
 
@@ -47,16 +48,20 @@ public class User {
 	
 	@NonNull
 	@NotNull
-	@Column(nullable = false)
-	@Email
-	private String mail;
-	
-	@NonNull
-	@NotNull
 	@Size(min = MIN_PASSWORD)
 	@Column(nullable = false)
 	@JsonSerialize(using = PasswordSerializer.class)
 	private String password;
+	
+	@NonNull
+	@NotNull
+	@Column(nullable = false, unique = true)
+	@Email
+	private String mail;
+	
+	@Column(unique = true)
+	@Size(max = MAX_PHONE)
+	private String phone;
 	
 	@NotNull
 	@NonNull
