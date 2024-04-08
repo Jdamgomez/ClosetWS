@@ -15,6 +15,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,7 +36,7 @@ public class User {
 	
 	public static final int MIN_USERNAME = 4;
 	public static final int MAX_USERNAME = 25;
-	public static final int MIN_PASSWORD = 5;
+	public static final int MIN_PASSWORD = 4;
 	public static final int MAX_PHONE=15;
 	public static final int MIN_FULL_NAME = 3;
 	public static final int MAX_FULL_NAME = 100;
@@ -73,6 +75,7 @@ public class User {
 	@NotNull
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ClosetwsApplication.DATE_PATTERN, locale ="es_ES")
 	@Column(name = "birth_date",nullable = false)
+	@Temporal(TemporalType.DATE)
 	private Date birthDate;
 	
 	@Lob

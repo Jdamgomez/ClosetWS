@@ -65,6 +65,7 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<!-- springdoc - https://springdoc.org -->
 			<groupId>org.springdoc</groupId>
