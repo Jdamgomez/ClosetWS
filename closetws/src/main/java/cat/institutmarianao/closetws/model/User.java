@@ -2,21 +2,26 @@ package cat.institutmarianao.closetws.model;
 
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import cat.institutmarianao.closetws.ClosetwsApplication;
 import cat.institutmarianao.closetws.PasswordSerializer;
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -81,12 +86,17 @@ public class User {
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "profile_picture", columnDefinition = "BLOB")
+	@JsonIgnore
 	private byte[] profilePicture;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+	private List<Container> containers;
 
+	@Transient
 	public String getBase64Image() {
 		return Base64.getEncoder().encodeToString(profilePicture);
 	}
-	
+	@Transient
 	public void setBase64Image(String b64Image) {
 		this.profilePicture=Base64.getDecoder().decode(b64Image);
 	}

@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -40,6 +42,11 @@ public abstract class Container {
 	protected String name;
 	
 	protected Type type;
+	
+	@NotNull
+	@JoinColumn(nullable = false)
+	@ManyToOne
+	protected User user;
 	
 	@OneToMany(mappedBy = "container",cascade = CascadeType.ALL)
 	@JsonManagedReference
