@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import cat.institutmarianao.closetws.ClosetwsApplication;
@@ -89,14 +90,16 @@ public class User {
 	@JsonIgnore
 	private byte[] profilePicture;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
 	private List<Container> containers;
 
 	@Transient
+	@JsonProperty("profile_picture")
 	public String getBase64Image() {
 		return Base64.getEncoder().encodeToString(profilePicture);
 	}
 	@Transient
+	@JsonProperty("profile_picture")
 	public void setBase64Image(String b64Image) {
 		this.profilePicture=Base64.getDecoder().decode(b64Image);
 	}
