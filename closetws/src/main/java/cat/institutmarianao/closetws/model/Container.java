@@ -68,9 +68,9 @@ public abstract class Container {
 	
 	@NotNull
 	@NonNull
-	@JoinColumn(nullable = false, name = "owner")
+	@JoinColumn(nullable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
-	protected User user;
+	protected User owner;
 	
 	@OneToMany(mappedBy = "container",cascade = CascadeType.ALL)
 	@JsonManagedReference

@@ -15,4 +15,5 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue(value = Container.CLOSET)
 public class Closet extends Container{
 
+	private int height;
 }

@@ -14,9 +14,9 @@ public interface ContainerService {
 
 	Container getById(@Positive Long id);
 	
-	List<Container> findAllClosets();
+	List<Container> findAllClosets(String owner);
 	
-	List<Container> findAllSuitcases();
+	List<Container> findAllSuitcases(String owner);
 		
 	Container save(@NotNull @Valid Container container);
 	
