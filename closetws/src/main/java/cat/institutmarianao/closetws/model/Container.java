@@ -31,7 +31,7 @@ import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name="closets")
+@Table(name="containers")
 @Data
 @NoArgsConstructor
 @SuperBuilder

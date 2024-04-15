@@ -43,11 +43,11 @@ public class ContainerController {
 	
 	/* Swagger */
 	@Operation(summary = "Find all containers")
-	@ApiResponse(responseCode = "200", content = { 
-			@Content(mediaType = "application/json", array= @ArraySchema( schema = @Schema(anyOf = {
-			Closet.class, Suitcase.class}, discriminatorProperty = "type"))) }, description = "Containers retrieved ok")
+	@ApiResponse(responseCode = "200", content = {
+			@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(anyOf = {
+					Closet.class, Suitcase.class }, discriminatorProperty = "type"))) }, description = "Containers retrieved ok")
 	/**/
-	@GetMapping("/find/all")
+	@GetMapping(value = "/find/all")
 	public List<Container> findAll(@RequestParam(value = "owner", required = false) String owner,
 			@RequestParam(value = "type", required = false) Type type) {
 
@@ -55,10 +55,10 @@ public class ContainerController {
 	}
 	
 	/* Swagger */
-	@Operation(summary = "Find all closets")
-	@ApiResponse(responseCode = "200", content = { 
-			@Content(mediaType = "application/json", array= @ArraySchema( schema = @Schema(anyOf = {
-			Closet.class, Suitcase.class}, discriminatorProperty = "type"))) }, description = "Containers retrieved ok")
+	@Operation(summary = "Find all containers")
+	@ApiResponse(responseCode = "200", content = {
+			@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(anyOf = {
+					Closet.class, Suitcase.class }, discriminatorProperty = "type"))) }, description = "Containers retrieved ok")
 	/**/
 	@GetMapping("/find/all/CLOSETS")
 	public List<Container> findAllClosets(@RequestParam(value = "owner", required = false) String owner) {
@@ -67,10 +67,10 @@ public class ContainerController {
 	}
 	
 	/* Swagger */
-	@Operation(summary = "Find all suitcases")
-	@ApiResponse(responseCode = "200", content = { 
-			@Content(mediaType = "application/json", array= @ArraySchema( schema = @Schema(anyOf = {
-			Closet.class, Suitcase.class}, discriminatorProperty = "type"))) }, description = "Containers retrieved ok")
+	@Operation(summary = "Find all containers")
+	@ApiResponse(responseCode = "200", content = {
+			@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(anyOf = {
+					Closet.class, Suitcase.class }, discriminatorProperty = "type"))) }, description = "Containers retrieved ok")
 	/**/
 	@GetMapping("/find/all/SUITCASES")
 	public List<Container> findAllSuitcases(@RequestParam(value = "owner", required = false) String owner) {
@@ -80,9 +80,8 @@ public class ContainerController {
 	
 	/* Swagger */
 	@Operation(summary = "Get container by id")
-	@ApiResponse(responseCode = "200", content = { 
-			@Content(mediaType = "application/json", array= @ArraySchema( schema = @Schema(oneOf = {
-			Closet.class, Suitcase.class}, discriminatorProperty = "type"))) }, description = "Container retrieved ok")
+	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json", schema = @Schema(anyOf = {
+			Closet.class, Suitcase.class }, discriminatorProperty = "type")) }, description = "Container retrieved ok")
 	@ApiResponse(responseCode = "404", content = {
 			@Content(mediaType = "application/json") }, description = "Container not found")
 	/**/
@@ -93,9 +92,11 @@ public class ContainerController {
 	
 	/* Swagger */
 	@Operation(summary = "Save a container")
-	@ApiResponse(responseCode = "200", content = { 
-			@Content(mediaType = "application/json", array= @ArraySchema( schema = @Schema(oneOf = {
-			Closet.class, Suitcase.class}, discriminatorProperty = "type"))) }, description = "Container saved ok")
+	@io.swagger.v3.oas.annotations.parameters.RequestBody(content = {
+			@Content(mediaType = "application/json", schema = @Schema(oneOf = { 
+					Closet.class,	Suitcase.class}, discriminatorProperty = "role"))})
+	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json", schema = @Schema(anyOf = {
+			Closet.class, Suitcase.class }, discriminatorProperty = "role")) }, description = "Container saved ok")
 	/**/
 	@PostMapping("/save")
 	@Validated(OnContainerCreate.class)
@@ -105,11 +106,10 @@ public class ContainerController {
 	
 	/* Swagger */
 	@Operation(summary = "Update a container")
-	@ApiResponse(responseCode = "200", content = { 
-			@Content(mediaType = "application/json", array= @ArraySchema( schema = @Schema(anyOf = {
-			Closet.class, Suitcase.class}, discriminatorProperty = "type"))) }, description = "Container updated ok")
+	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json", schema = @Schema(anyOf = {
+			Closet.class, Suitcase.class }, discriminatorProperty = "type")) }, description = "Container updated ok")
 	@ApiResponse(responseCode = "404", content = {
-			@Content(mediaType = "application/json") }, description = "Resource not found")
+			@Content(mediaType = "application/json") }, description = "Container not found")
 	/**/
 	@PutMapping("/update")
 	@Validated(OnContainerUpdate.class)
