@@ -39,8 +39,10 @@ import lombok.experimental.SuperBuilder;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
-@JsonSubTypes({ @JsonSubTypes.Type(value = Closet.class, name = Container.CLOSET),
-		@JsonSubTypes.Type(value = Suitcase.class, name = Container.SUITCASE)})
+@JsonSubTypes({ 
+	@JsonSubTypes.Type(value = Closet.class, name = Container.CLOSET),
+	@JsonSubTypes.Type(value = Suitcase.class, name = Container.SUITCASE)
+})
 public abstract class Container {
 	
 	public static final String CLOSET="CLOSET";
@@ -72,7 +74,7 @@ public abstract class Container {
 	@ManyToOne(fetch = FetchType.EAGER)
 	protected User owner;
 	
-	@OneToMany(mappedBy = "container",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "container",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonManagedReference
 	protected List<Clothes> clothes;
 }

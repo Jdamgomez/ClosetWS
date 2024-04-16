@@ -88,7 +88,8 @@ public class User {
 	@Column(name = "profile_picture", columnDefinition = "BLOB")
 	private byte[] profilePicture;
 	
-	@OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+	@OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE}, fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Container> containers;
 
 	@Transient

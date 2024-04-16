@@ -86,17 +86,17 @@ public class ContainerController {
 			@Content(mediaType = "application/json") }, description = "Container not found")
 	/**/
 	@GetMapping("/get/by/id/{containerId}")
-	public Container findById(@PathVariable("shipmentId") @Positive Long shipmentId) {
-		return containerService.getById(shipmentId);
+	public Container findById(@PathVariable("containerId") @Positive Long containerId) {
+		return containerService.getById(containerId);
 	}
 	
 	/* Swagger */
 	@Operation(summary = "Save a container")
 	@io.swagger.v3.oas.annotations.parameters.RequestBody(content = {
 			@Content(mediaType = "application/json", schema = @Schema(oneOf = { 
-					Closet.class,	Suitcase.class}, discriminatorProperty = "role"))})
+					Closet.class,	Suitcase.class}, discriminatorProperty = "type"))})
 	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json", schema = @Schema(anyOf = {
-			Closet.class, Suitcase.class }, discriminatorProperty = "role")) }, description = "Container saved ok")
+			Closet.class, Suitcase.class }, discriminatorProperty = "type")) }, description = "Container saved ok")
 	/**/
 	@PostMapping("/save")
 	@Validated(OnContainerCreate.class)
@@ -123,7 +123,7 @@ public class ContainerController {
 			@Content(mediaType = "application/json") }, description = "Container deleted ok")
 	/**/
 	@DeleteMapping("/delete/by/id/{containerId}")
-	public void deleteById(@PathVariable("shipment_id") @Positive Long containerId) {
+	public void deleteById(@PathVariable("containerId") @Positive Long containerId) {
 		containerService.deleteById(containerId);
 	}
 }
