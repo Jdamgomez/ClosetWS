@@ -2,7 +2,7 @@ package cat.institutmarianao.closetws.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -75,6 +75,6 @@ public abstract class Container {
 	protected User owner;
 	
 	@OneToMany(mappedBy = "container",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonManagedReference
+	@JsonIgnore
 	protected List<Clothes> clothes;
 }
