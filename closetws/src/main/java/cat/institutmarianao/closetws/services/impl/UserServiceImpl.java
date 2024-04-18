@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
 		if (user.getPassword() != null) dbUser.setPassword(user.getPassword());
 		if (user.getFullName() != null) dbUser.setFullName(user.getFullName());
-		if (user.getProfilePicture()!= null) dbUser.setProfilePicture(user.getProfilePicture());
+		if (user.getProfilePicture() != null) dbUser.setProfilePicture(user.getProfilePicture());
 
 		return userRepository.saveAndFlush(dbUser);
 	}

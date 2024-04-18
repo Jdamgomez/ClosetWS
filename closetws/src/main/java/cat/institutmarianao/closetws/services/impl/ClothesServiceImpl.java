@@ -3,6 +3,7 @@ package cat.institutmarianao.closetws.services.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -12,6 +13,10 @@ import cat.institutmarianao.closetws.model.Clothes.Category;
 import cat.institutmarianao.closetws.model.Clothes.Collection;
 import cat.institutmarianao.closetws.repositories.ClothesRepository;
 import cat.institutmarianao.closetws.services.ClothesService;
+import cat.institutmarianao.closetws.specifications.ClothesWithCategory;
+import cat.institutmarianao.closetws.specifications.ClothesWithCollection;
+import cat.institutmarianao.closetws.specifications.ClothesWithContainer;
+import cat.institutmarianao.closetws.specifications.ClothesWithOwner;
 import cat.institutmarianao.closetws.validation.groups.OnClothesCreate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -25,9 +30,11 @@ public class ClothesServiceImpl implements ClothesService{
 	private ClothesRepository clothesRepository;
 	
 	@Override
-	public List<Clothes> findAll(Long container, Collection collection, Category category) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Clothes> findAll(Long container, String owner, Collection collection, Category category) {
+		Specification<Clothes> spec= Specification.where(new ClothesWithContainer(container))
+						.and(new ClothesWithOwner(owner).and(new ClothesWithCollection(collection)
+						.and(new ClothesWithCategory(category))));
+		return clothesRepository.findAll(spec);
 	}
 
 	@Override
@@ -43,14 +50,23 @@ public class ClothesServiceImpl implements ClothesService{
 
 	@Override
 	public Clothes update(@NotNull @Valid Clothes clothes) {
-		// TODO Auto-generated method stub
-		return null;
+		Clothes dbClothes = getById(clothes.getId());
+		
+		if (clothes.getName() != null) dbClothes.setName(clothes.getName());
+		if (clothes.getColor() != null) dbClothes.setColor(clothes.getColor());
+		if (clothes.getSize() != null) dbClothes.setSize(clothes.getSize());
+		if (clothes.getPicture() != null) dbClothes.setPicture(clothes.getPicture());
+		if (clothes.getCollection() != null) dbClothes.setCollection(clothes.getCollection());
+		if (clothes.getCategory() != null) dbClothes.setCategory(clothes.getCategory());
+		if (clothes.getContainer() != null) dbClothes.setContainer(clothes.getContainer());
+		if (clothes.getLastUse() != null) dbClothes.setLastUse(clothes.getLastUse());
+
+		return clothesRepository.saveAndFlush(dbClothes);
 	}
 
 	@Override
 	public void deleteById(@Positive Long clothesId) {
-		// TODO Auto-generated method stub
-		
+		clothesRepository.deleteById(clothesId);
 	}
 
 }

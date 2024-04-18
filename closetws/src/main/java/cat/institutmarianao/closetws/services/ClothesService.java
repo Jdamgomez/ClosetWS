@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Positive;
 
 public interface ClothesService {
 
-	List<Clothes> findAll(Long container, Collection collection, Category category);
+	List<Clothes> findAll(Long container, String owner, Collection collection, Category category);
 
 	Clothes getById(@Positive Long id);
 	

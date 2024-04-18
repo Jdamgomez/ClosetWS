@@ -65,7 +65,7 @@ public class ContainerServiceImpl implements ContainerService{
 	public Container update(@NotNull @Valid Container container) {
 		Container dbContainer= getById(container.getId());
 		
-		if(container.getName()!=null) dbContainer.setName(container.getName());
+		if(container.getName()!= null) dbContainer.setName(container.getName());
 		
 		return containerRepository.saveAndFlush(dbContainer);
 	}
