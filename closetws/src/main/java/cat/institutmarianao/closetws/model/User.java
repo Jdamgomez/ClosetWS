@@ -1,8 +1,13 @@
 package cat.institutmarianao.closetws.model;
 
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,6 +19,8 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
@@ -37,7 +44,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class User {
+public class User implements UserDetails{
 	
 	public static final int MIN_USERNAME = 4;
 	public static final int MAX_USERNAME = 25;
@@ -45,6 +52,10 @@ public class User {
 	public static final int MAX_PHONE=15;
 	public static final int MIN_FULL_NAME = 3;
 	public static final int MAX_FULL_NAME = 100;
+	
+	public enum Role{
+		USER,ADMIN
+	}
 
 	@Id
 	@NonNull
@@ -76,6 +87,9 @@ public class User {
 	@Column(name = "full_name",nullable = false)
 	private String fullName;
 	
+	@Enumerated(EnumType.STRING)
+	private Role role;
+	
 	@NonNull
 	@NotNull
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ClosetwsApplication.DATE_PATTERN, locale ="es_ES")
@@ -101,5 +115,25 @@ public class User {
 	@JsonIgnore
 	public void setBase64Image(String b64Image) {
 		this.profilePicture=Base64.getDecoder().decode(b64Image);
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

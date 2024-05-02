@@ -7,4 +7,5 @@ import cat.institutmarianao.closetws.model.User;
 
 
 public interface UserRepository extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
+	
 }
