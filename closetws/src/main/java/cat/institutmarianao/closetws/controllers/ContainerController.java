@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -35,6 +36,7 @@ import jakarta.validation.constraints.Positive;
 /**/
 @RestController
 @RequestMapping("/containers")
+@SecurityRequirement(name = "closeteapi")
 @Validated
 public class ContainerController {
 

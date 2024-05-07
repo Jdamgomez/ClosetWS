@@ -8,11 +8,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
 @SpringBootApplication
 @PropertySource("classpath:openapi.properties")
 @OpenAPIDefinition(info = @Info(title = "${ws.title}", version = "${ws.version}"))
+@SecurityScheme(name = "closeteapi", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class ClosetwsApplication {
 	public static final String DATE_PATTERN = "dd/MM/yyyy";
 	@Bean

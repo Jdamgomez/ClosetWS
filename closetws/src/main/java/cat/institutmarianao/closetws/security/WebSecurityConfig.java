@@ -3,6 +3,7 @@ package cat.institutmarianao.closetws.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,17 +25,23 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 	
+	private static final String[] AUTH_WHITELIST= {
+			"/api/v1/auth/**",
+			"v3/api-docs/**",
+			"v3/api-docs.yaml",
+			"swagger-ui/**",
+			"swagger-ui.html"
+	};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager manager) throws Exception {
 		return http.csrf(csrf->csrf.disable())
-				/*.authorizeHttpRequests(req->{
+				.authorizeHttpRequests(req->{
 					req.requestMatchers(HttpMethod.POST,"/users/save").permitAll();
 					req.requestMatchers(HttpMethod.POST,"/users/authenticate").permitAll();
-					req.requestMatchers("swagger-ui/**").permitAll();
-					req.requestMatchers("swagger-ui.html").permitAll();
+					req.requestMatchers(AUTH_WHITELIST).permitAll();
 					req.anyRequest().authenticated();
-				})*/
+				})
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
 	}
@@ -44,7 +51,7 @@ public class WebSecurityConfig {
 		UserDetails user= User
 				.withUsername("adminjp")
 				.password(passwordEncoder().encode("marianao"))
-				.roles("USER")
+				.roles("ADMIN")
 				.build();
 		return new InMemoryUserDetailsManager(user);
 	}
