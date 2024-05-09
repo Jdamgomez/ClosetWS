@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
 
 	@Override
 	public User authenticate(@NotEmpty String username, @NotEmpty String password) {
