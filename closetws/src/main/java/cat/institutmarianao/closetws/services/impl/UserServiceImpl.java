@@ -6,13 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import cat.institutmarianao.closetws.controllers.dto.AuthLoginRequest;
+import cat.institutmarianao.closetws.controllers.dto.AuthResponse;
 import cat.institutmarianao.closetws.exception.NotFoundException;
 import cat.institutmarianao.closetws.model.User;
 import cat.institutmarianao.closetws.repositories.UserRepository;
+import cat.institutmarianao.closetws.security.JwtUtils;
 import cat.institutmarianao.closetws.services.UserService;
 import cat.institutmarianao.closetws.specifications.UserWithFullName;
 import cat.institutmarianao.closetws.validation.groups.OnUserCreate;
@@ -35,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private JwtUtils jwtUtils;
 	
 
 	@Override
@@ -80,5 +89,25 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteByUsername(@NotBlank String username) {
 		userRepository.deleteById(username);
+	}
+
+	@Override
+	public AuthResponse loginUser(@NotNull AuthLoginRequest authLoginRequest) {
+		String username= authLoginRequest.username();
+		String password= authLoginRequest.password();
+		Authentication authentication= tempAuthenticate(username, password);
+		SecurityContextHolder.getContext().setAuthentication(authentication);;
+		String accessToken= jwtUtils.createToken(authentication);
+		
+		return new AuthResponse(username, messageSource.getMessage("User.login.successful",
+				null, LocaleContextHolder.getLocale()), accessToken, true);
+	}
+	
+	public Authentication tempAuthenticate(String username, String password) {
+		User user = getByUsername(username);
+		if (!passwordEncoder.matches(password, user.getPassword()))
+			throw new ValidationException(messageSource.getMessage("error.UserService.user.password",
+					new Object[] { username }, LocaleContextHolder.getLocale()));
+		return new UsernamePasswordAuthenticationToken(password, user.getPassword());
 	}
 }

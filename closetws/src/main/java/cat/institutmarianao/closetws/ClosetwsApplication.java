@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 @SpringBootApplication
 @PropertySource("classpath:openapi.properties")
 @OpenAPIDefinition(info = @Info(title = "${ws.title}", version = "${ws.version}"))
-@SecurityScheme(name = "closeteapi", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "closeteapi", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class ClosetwsApplication {
 	public static final String DATE_PATTERN = "dd/MM/yyyy";
 	@Bean

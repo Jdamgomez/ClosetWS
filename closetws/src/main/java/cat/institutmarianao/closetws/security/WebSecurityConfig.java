@@ -1,6 +1,7 @@
 package cat.institutmarianao.closetws.security;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,11 +20,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import cat.institutmarianao.closetws.security.filter.JwtTokenValidator;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
+	
+	@Autowired
+	private JwtUtils jwtUtils;
 	
 	private static final String[] AUTH_WHITELIST= {
 			"/api/v1/auth/**",
@@ -37,12 +44,14 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager manager) throws Exception {
 		return http.csrf(csrf->csrf.disable())
 				.authorizeHttpRequests(req->{
+					req.requestMatchers(HttpMethod.POST,"/auth/**").permitAll();
 					req.requestMatchers(HttpMethod.POST,"/users/save").permitAll();
 					req.requestMatchers(HttpMethod.POST,"/users/authenticate").permitAll();
 					req.requestMatchers(AUTH_WHITELIST).permitAll();
 					req.anyRequest().authenticated();
 				})
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
 	}
 	

@@ -1,7 +1,6 @@
 package cat.institutmarianao.closetws.controllers;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,6 @@ import cat.institutmarianao.closetws.validation.groups.OnUserUpdate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -48,18 +46,18 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	/* Swagger */
+	/* Swagger 
 	@Operation(summary = "Authenticate a user")
 	@io.swagger.v3.oas.annotations.parameters.RequestBody(content = {
 			@Content(mediaType = "application/json", examples = {
 					@ExampleObject(value = "{\"username\":\"string\",\"password\":\"string\"}") }) })
 	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))},  description = "User authenticated ok")
 	@ApiResponse(responseCode = "404", content = { @Content(mediaType = "application/json") }, description = "Resource not found")
-	/**/
+	
 	@PostMapping("/authenticate")
 	public User authenticate(@RequestBody Map<String, String> usernamePassword) {
 		return userService.authenticate(usernamePassword.get("username"), usernamePassword.get("password"));
-	}
+	}*/
 
 	/* Swagger */
 	@Operation(summary = "Find all users")
