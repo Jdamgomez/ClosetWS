@@ -45,8 +45,6 @@ public class WebSecurityConfig {
 		return http.csrf(csrf->csrf.disable())
 				.authorizeHttpRequests(req->{
 					req.requestMatchers(HttpMethod.POST,"/auth/**").permitAll();
-					req.requestMatchers(HttpMethod.POST,"/users/save").permitAll();
-					req.requestMatchers(HttpMethod.POST,"/users/authenticate").permitAll();
 					req.requestMatchers(AUTH_WHITELIST).permitAll();
 					req.anyRequest().authenticated();
 				})
