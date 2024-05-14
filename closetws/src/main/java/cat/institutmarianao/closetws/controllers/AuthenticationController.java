@@ -40,15 +40,15 @@ public class AuthenticationController {
 	private PasswordEncoder passwordEncoder;
 	
 	/* Swagger */
-	@Operation(summary = "Save a user")
+	@Operation(summary = "Sign-up a user")
 	@io.swagger.v3.oas.annotations.parameters.RequestBody(content = {
 			@Content(mediaType = "application/json",schema = @Schema(implementation = User.class))})
-	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = User.class)) }, description = "User saved ok")
+	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json",schema = @Schema(implementation = ResponseEntity.class)) }, description = "User saved ok")
 	/**/
-	@PostMapping("/save")
+	@PostMapping("/signup")
 	@Validated(OnUserCreate.class)
-	public User save(@RequestBody @Valid User user) {
-		return userService.save(encodePassword(user));
+	public ResponseEntity<AuthResponse> signup(@RequestBody @Valid User user) {
+		return new ResponseEntity<>(userService.createUser(encodePassword(user)),HttpStatus.OK);
 	}
 	
 	

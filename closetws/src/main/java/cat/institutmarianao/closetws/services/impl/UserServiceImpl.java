@@ -26,7 +26,6 @@ import cat.institutmarianao.closetws.validation.groups.OnUserUpdate;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Validated
@@ -47,16 +46,6 @@ public class UserServiceImpl implements UserService {
 	
 
 	@Override
-	public User authenticate(@NotEmpty String username, @NotEmpty String password) {
-		User user = getByUsername(username);
-		if (!passwordEncoder.matches(password, user.getPassword()))
-			throw new ValidationException(messageSource.getMessage("error.UserService.user.password",
-					new Object[] { username }, LocaleContextHolder.getLocale()));
-
-		return user;
-	}
-
-	@Override
 	public List<User> findAll(String fullName) {
 		Specification<User> spec = Specification.where(new UserWithFullName(fullName));
 		return userRepository.findAll(spec);
@@ -65,13 +54,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getByUsername(@NotBlank String username) {
 		return userRepository.findById(username).orElseThrow(NotFoundException::new);
-	}
-
-	@Override
-	@Validated(OnUserCreate.class)
-	public User save(@NotNull @Valid User user) {
-		User ret = userRepository.saveAndFlush(user);
-		return ret;
 	}
 
 	@Override
@@ -95,19 +77,29 @@ public class UserServiceImpl implements UserService {
 	public AuthResponse loginUser(@NotNull AuthLoginRequest authLoginRequest) {
 		String username= authLoginRequest.username();
 		String password= authLoginRequest.password();
-		Authentication authentication= tempAuthenticate(username, password);
-		SecurityContextHolder.getContext().setAuthentication(authentication);;
+		Authentication authentication= authenticate(username, password);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String accessToken= jwtUtils.createToken(authentication);
 		
 		return new AuthResponse(username, messageSource.getMessage("User.login.successful",
 				null, LocaleContextHolder.getLocale()), accessToken, true);
 	}
 	
-	public Authentication tempAuthenticate(String username, String password) {
+	private Authentication authenticate(String username, String password) {
 		User user = getByUsername(username);
 		if (!passwordEncoder.matches(password, user.getPassword()))
 			throw new ValidationException(messageSource.getMessage("error.UserService.user.password",
 					new Object[] { username }, LocaleContextHolder.getLocale()));
 		return new UsernamePasswordAuthenticationToken(password, user.getPassword());
+	}
+
+	@Override
+	@Validated(OnUserCreate.class)
+	public AuthResponse createUser(@NotNull @Valid User user) {
+		User userCreated = userRepository.saveAndFlush(user);
+		Authentication authentication= new UsernamePasswordAuthenticationToken(userCreated.getUsername(), userCreated.getPassword());
+		String accessToken= jwtUtils.createToken(authentication);
+		return new AuthResponse(userCreated.getUsername(), messageSource.getMessage("User.signup.successful",
+				null, LocaleContextHolder.getLocale()), accessToken, true);
 	}
 }
