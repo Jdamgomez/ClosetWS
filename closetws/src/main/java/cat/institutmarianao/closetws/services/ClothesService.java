@@ -6,6 +6,7 @@ import cat.institutmarianao.closetws.model.Clothes;
 import cat.institutmarianao.closetws.model.Clothes.Category;
 import cat.institutmarianao.closetws.model.Clothes.Collection;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -18,6 +19,8 @@ public interface ClothesService {
 	Clothes save(@NotNull @Valid Clothes clothes);
 	
 	Clothes update(@NotNull @Valid Clothes clothes);
+	
+	List<Clothes> updateLastUse(@NotNull @Valid @NotEmpty List<Clothes> clothes);
 
 	void deleteById(@Positive Long clothesId);
 }

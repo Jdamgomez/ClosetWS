@@ -1,5 +1,6 @@
 package cat.institutmarianao.closetws.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ import cat.institutmarianao.closetws.specifications.ClothesWithCollection;
 import cat.institutmarianao.closetws.specifications.ClothesWithContainer;
 import cat.institutmarianao.closetws.specifications.ClothesWithOwner;
 import cat.institutmarianao.closetws.validation.groups.OnClothesCreate;
+import cat.institutmarianao.closetws.validation.groups.OnClothesUpdate;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -49,6 +52,7 @@ public class ClothesServiceImpl implements ClothesService{
 	}
 
 	@Override
+	@Validated(OnClothesUpdate.class)
 	public Clothes update(@NotNull @Valid Clothes clothes) {
 		Clothes dbClothes = getById(clothes.getId());
 		
@@ -65,8 +69,18 @@ public class ClothesServiceImpl implements ClothesService{
 	}
 
 	@Override
+	public List<Clothes> updateLastUse(@NotNull @Valid @NotEmpty List<Clothes> clothes) {
+		List<Clothes> dbClothes= new ArrayList<>();
+		for (Clothes c : clothes) {
+			Clothes dbCl = getById(c.getId());
+			if (c.getLastUse() != null) dbCl.setLastUse(c.getLastUse());
+			dbClothes.add(dbCl);
+		}
+		return clothesRepository.saveAllAndFlush(dbClothes);
+	}
+	
+	@Override
 	public void deleteById(@Positive Long clothesId) {
 		clothesRepository.deleteById(clothesId);
 	}
-
 }

@@ -97,17 +97,16 @@ public class UserServiceImpl implements UserService {
 	@Validated(OnUserCreate.class)
 	public AuthResponse createUser(@NotNull @Valid User user) {
 		try {
-			if(getByUsername(user.getUsername())!=null)
-				throw new ValidationException(messageSource.getMessage("error.UserService.user.found",
-						new Object[] { user.getUsername() }, LocaleContextHolder.getLocale()));
-		} catch (Exception e) {
+			getByUsername(user.getUsername());
+		}catch (NotFoundException e) {
 			User userCreated = userRepository.saveAndFlush(user);
 			Authentication authentication= new UsernamePasswordAuthenticationToken(userCreated.getUsername(), userCreated.getPassword(), jwtUtils.getAuthorities());
 			String accessToken= jwtUtils.createToken(authentication);
 			return new AuthResponse(userCreated.getUsername(), messageSource.getMessage("User.signup.successful",
 					null, LocaleContextHolder.getLocale()), accessToken, true);
 		}
-		return null;
+		throw new ValidationException(messageSource.getMessage("error.UserService.user.found",
+				new Object[] { user.getUsername() }, LocaleContextHolder.getLocale()));
 	}
 	
 }

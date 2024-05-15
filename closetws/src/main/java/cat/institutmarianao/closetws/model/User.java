@@ -93,6 +93,10 @@ public class User {
 	@OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE}, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Container> containers;
+	
+	@OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE}, fetch = FetchType.EAGER)
+	@JsonIgnore
+	private List<Outfit> outfits;
 
 	@Transient
 	@JsonIgnore
