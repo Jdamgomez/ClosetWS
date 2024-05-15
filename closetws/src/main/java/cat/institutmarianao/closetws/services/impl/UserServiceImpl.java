@@ -90,16 +90,24 @@ public class UserServiceImpl implements UserService {
 		if (!passwordEncoder.matches(password, user.getPassword()))
 			throw new ValidationException(messageSource.getMessage("error.UserService.user.password",
 					new Object[] { username }, LocaleContextHolder.getLocale()));
-		return new UsernamePasswordAuthenticationToken(password, user.getPassword());
+		return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), jwtUtils.getAuthorities());
 	}
 
 	@Override
 	@Validated(OnUserCreate.class)
 	public AuthResponse createUser(@NotNull @Valid User user) {
-		User userCreated = userRepository.saveAndFlush(user);
-		Authentication authentication= new UsernamePasswordAuthenticationToken(userCreated.getUsername(), userCreated.getPassword());
-		String accessToken= jwtUtils.createToken(authentication);
-		return new AuthResponse(userCreated.getUsername(), messageSource.getMessage("User.signup.successful",
-				null, LocaleContextHolder.getLocale()), accessToken, true);
+		try {
+			if(getByUsername(user.getUsername())!=null)
+				throw new ValidationException(messageSource.getMessage("error.UserService.user.found",
+						new Object[] { user.getUsername() }, LocaleContextHolder.getLocale()));
+		} catch (Exception e) {
+			User userCreated = userRepository.saveAndFlush(user);
+			Authentication authentication= new UsernamePasswordAuthenticationToken(userCreated.getUsername(), userCreated.getPassword(), jwtUtils.getAuthorities());
+			String accessToken= jwtUtils.createToken(authentication);
+			return new AuthResponse(userCreated.getUsername(), messageSource.getMessage("User.signup.successful",
+					null, LocaleContextHolder.getLocale()), accessToken, true);
+		}
+		return null;
 	}
+	
 }

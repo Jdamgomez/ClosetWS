@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class JwtTokenValidator extends OncePerRequestFilter{
+public class RequestFilter extends OncePerRequestFilter{
 	
 	private JwtUtils jwtUtils;
 	
@@ -37,12 +37,11 @@ public class JwtTokenValidator extends OncePerRequestFilter{
 			DecodedJWT decodedJWT= jwtUtils.validateToken(jwtToken);
 			String username=jwtUtils.extractUsername(decodedJWT);
 			SecurityContext context= SecurityContextHolder.getContext();
-			Authentication authentication= new UsernamePasswordAuthenticationToken(username, null);
+			Authentication authentication= new UsernamePasswordAuthenticationToken(username, null, jwtUtils.getAuthorities());
 			context.setAuthentication(authentication);
 			SecurityContextHolder.setContext(context);
 		}
 		
 		filterChain.doFilter(request, response);
 	}
-
 }
