@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import cat.institutmarianao.closetws.ClosetwsApplication;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,6 +33,8 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Outfit {
 	
+	private static final String OUTFIT_DATE_PATTERN="dd/MM/yyyy HH:mm:ss";
+	
 	@EqualsAndHashCode.Include
 	@Id
 	@NotNull
@@ -47,14 +47,14 @@ public class Outfit {
 	
 	@NonNull
 	@NotNull
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ClosetwsApplication.DATE_PATTERN, locale ="es_ES")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = OUTFIT_DATE_PATTERN, locale ="es_ES")
 	@Column(name = "creation_date",nullable = false)
-	@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date creationDate;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ClosetwsApplication.DATE_PATTERN, locale ="es_ES")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = OUTFIT_DATE_PATTERN, locale ="es_ES")
 	@Column(name = "modification_date",nullable = false)
-	@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date modificationDate;
 	
 	@NotNull
@@ -63,7 +63,7 @@ public class Outfit {
 	@ManyToOne(fetch = FetchType.EAGER)
 	protected User owner;
 	
-	@ManyToMany(/*mappedBy = "outfits", */cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE}, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			  name = "outfits_clothes", 
 			  joinColumns = @JoinColumn(name = "outfit_id"), 

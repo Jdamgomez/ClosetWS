@@ -98,7 +98,7 @@ public class Clothes {
 	@Temporal(TemporalType.DATE)
 	private Date lastUse;
 	
-	@ManyToMany(mappedBy = "clothes", cascade = {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE}, fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "clothes", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Outfit> outfits;
 	

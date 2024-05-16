@@ -74,7 +74,7 @@ public abstract class Container {
 	@ManyToOne(fetch = FetchType.EAGER)
 	protected User owner;
 	
-	@OneToMany(mappedBy = "container",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "container",cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JsonIgnore
 	protected List<Clothes> clothes;
 }
