@@ -1,5 +1,6 @@
 package cat.institutmarianao.closetws.services;
 
+import java.util.Date;
 import java.util.List;
 
 import cat.institutmarianao.closetws.model.Clothes;
@@ -12,7 +13,7 @@ import jakarta.validation.constraints.Positive;
 
 public interface ClothesService {
 
-	List<Clothes> findAll(Long container, String owner, Collection collection, Category category);
+	List<Clothes> findAll(Long container, String owner, Collection collection, Category category, Date from, Date to);
 
 	Clothes getById(@Positive Long id);
 	
@@ -20,7 +21,7 @@ public interface ClothesService {
 	
 	Clothes update(@NotNull @Valid Clothes clothes);
 	
-	List<Clothes> updateLastUse(@NotNull @Valid @NotEmpty List<Clothes> clothes);
+	List<Clothes> updateLastUse(@NotNull @Valid @NotEmpty List<Clothes> clothesList);
 
 	void deleteById(@Positive Long clothesId);
 }

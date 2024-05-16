@@ -1,6 +1,7 @@
 package cat.institutmarianao.closetws.services.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import cat.institutmarianao.closetws.services.ClothesService;
 import cat.institutmarianao.closetws.specifications.ClothesWithCategory;
 import cat.institutmarianao.closetws.specifications.ClothesWithCollection;
 import cat.institutmarianao.closetws.specifications.ClothesWithContainer;
+import cat.institutmarianao.closetws.specifications.ClothesWithDate;
 import cat.institutmarianao.closetws.specifications.ClothesWithOwner;
 import cat.institutmarianao.closetws.validation.groups.OnClothesCreate;
 import cat.institutmarianao.closetws.validation.groups.OnClothesUpdate;
@@ -33,10 +35,10 @@ public class ClothesServiceImpl implements ClothesService{
 	private ClothesRepository clothesRepository;
 	
 	@Override
-	public List<Clothes> findAll(Long container, String owner, Collection collection, Category category) {
+	public List<Clothes> findAll(Long container, String owner, Collection collection, Category category, Date from, Date to) {
 		Specification<Clothes> spec= Specification.where(new ClothesWithContainer(container))
-						.and(new ClothesWithOwner(owner).and(new ClothesWithCollection(collection)
-						.and(new ClothesWithCategory(category))));
+						.and(new ClothesWithOwner(owner)).and(new ClothesWithCollection(collection))
+						.and(new ClothesWithCategory(category)).and(new ClothesWithDate(from, to));
 		return clothesRepository.findAll(spec);
 	}
 
@@ -69,14 +71,15 @@ public class ClothesServiceImpl implements ClothesService{
 	}
 
 	@Override
-	public List<Clothes> updateLastUse(@NotNull @Valid @NotEmpty List<Clothes> clothes) {
-		List<Clothes> dbClothes= new ArrayList<>();
-		for (Clothes c : clothes) {
-			Clothes dbCl = getById(c.getId());
-			if (c.getLastUse() != null) dbCl.setLastUse(c.getLastUse());
-			dbClothes.add(dbCl);
+	@Validated(OnClothesUpdate.class)
+	public List<Clothes> updateLastUse(@NotNull @Valid @NotEmpty List<Clothes> clothesList) {
+		List<Clothes> dbClothesList= new ArrayList<>();
+		for (Clothes clothes : clothesList) {
+			Clothes dbClothes = getById(clothes.getId());
+			if (clothes.getLastUse() != null) dbClothes.setLastUse(clothes.getLastUse());
+			dbClothesList.add(dbClothes);
 		}
-		return clothesRepository.saveAllAndFlush(dbClothes);
+		return clothesRepository.saveAllAndFlush(dbClothesList);
 	}
 	
 	@Override

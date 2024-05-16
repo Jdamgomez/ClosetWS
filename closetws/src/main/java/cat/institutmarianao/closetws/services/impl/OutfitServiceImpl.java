@@ -4,17 +4,23 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import cat.institutmarianao.closetws.exception.NotFoundException;
 import cat.institutmarianao.closetws.model.Outfit;
 import cat.institutmarianao.closetws.repositories.OutfitRepository;
 import cat.institutmarianao.closetws.services.OutfitService;
+import cat.institutmarianao.closetws.specifications.OutfitWithDate;
+import cat.institutmarianao.closetws.specifications.OutfitWithOwner;
 import cat.institutmarianao.closetws.validation.groups.OnOutfitCreate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+@Validated
+@Service
 public class OutfitServiceImpl implements OutfitService{
 	
 	@Autowired
@@ -22,8 +28,9 @@ public class OutfitServiceImpl implements OutfitService{
 
 	@Override
 	public List<Outfit> findAll(String owner, Date creationFrom, Date creationTo) {
-		// TODO Auto-generated method stub
-		return null;
+		Specification<Outfit> spec= Specification.where(new OutfitWithOwner(owner))
+							.and(new OutfitWithDate(creationFrom, creationTo));
+		return outfitRepository.findAll(spec);
 	}
 
 	@Override

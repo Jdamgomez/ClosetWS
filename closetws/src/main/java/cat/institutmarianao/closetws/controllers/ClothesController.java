@@ -1,5 +1,6 @@
 package cat.institutmarianao.closetws.controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,10 @@ public class ClothesController {
 	public List<Clothes> findAll( @RequestParam(value = "containerId", required = false) Long container,
 			@RequestParam(value = "owner username", required = false) String owner,
 			@RequestParam(value = "collection", required = false) Collection collection,
-			@RequestParam(value = "category", required = false) Category category) {
-		return clothesService.findAll(container, owner, collection, category);
+			@RequestParam(value = "category", required = false) Category category,
+			@RequestParam(value = "from", required = false) Date from,
+			@RequestParam(value = "to", required = false) Date to ){
+		return clothesService.findAll(container, owner, collection, category, from, to);
 	}
 
 	/* Swagger */
@@ -89,6 +92,18 @@ public class ClothesController {
 	public Clothes update(@RequestBody @Valid Clothes clothes) {
 		return clothesService.update(clothes);
 	}
+	
+	/* Swagger */
+	@Operation(summary = "Update the last use of a list of clothes")
+	@ApiResponse(responseCode = "200", content = { @Content(mediaType = "application/json") }, description = "Clothes updated ok")
+	@ApiResponse(responseCode = "404", content = {
+			@Content(mediaType = "application/json") }, description = "Resource not found")
+	/**/
+	@PutMapping("/update/last-use")
+	@Validated(OnClothesUpdate.class)
+	public List<Clothes> updateLastUse(@RequestBody @Valid List<Clothes> clothesList) {
+		return clothesService.updateLastUse(clothesList);
+	}
 
 	/* Swagger */
 	@Operation(summary = "Delete a clothes")
@@ -96,7 +111,7 @@ public class ClothesController {
 			@Content(mediaType = "application/json") }, description = "Clothes deleted ok")
 	/**/
 	@DeleteMapping("/delete/by/clothesId/{clothesId}")
-	public void deleteByUsername(@PathVariable("clothesId") @Positive Long clothesId) {
+	public void deleteById(@PathVariable("clothesId") @Positive Long clothesId) {
 		clothesService.deleteById(clothesId);
 	}
 }
