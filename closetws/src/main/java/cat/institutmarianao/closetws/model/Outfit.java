@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -53,7 +54,7 @@ public class Outfit {
 	private Date creationDate;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = OUTFIT_DATE_PATTERN, locale ="es_ES")
-	@Column(name = "modification_date",nullable = false)
+	@Column(name = "modification_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modificationDate;
 	
@@ -63,7 +64,7 @@ public class Outfit {
 	@ManyToOne(fetch = FetchType.EAGER)
 	protected User owner;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(
 			  name = "outfits_clothes", 
 			  joinColumns = @JoinColumn(name = "outfit_id"), 

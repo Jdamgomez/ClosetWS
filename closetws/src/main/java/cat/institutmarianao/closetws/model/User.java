@@ -90,11 +90,11 @@ public class User {
 	@Column(name = "profile_picture", columnDefinition = "BLOB")
 	private byte[] profilePicture;
 	
-	@OneToMany(mappedBy = "owner", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Container> containers;
 	
-	@OneToMany(mappedBy = "owner", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Outfit> outfits;
 

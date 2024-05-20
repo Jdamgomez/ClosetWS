@@ -61,12 +61,8 @@ public class Clothes {
 	@NonNull
 	private String name;
 	
-	@NotNull
-	@NonNull
 	private String color;
 	
-	@NotNull
-	@NonNull
 	private String size;
 	
 	@Lob
