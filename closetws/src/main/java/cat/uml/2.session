@@ -1,0 +1,8 @@
+window_sizes 1920 1001 450 1464 819 128
+
+show_stereotypes
+selected 
+  package_ref 129 // uml
+open
+end
+end

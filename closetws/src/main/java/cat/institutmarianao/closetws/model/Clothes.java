@@ -72,13 +72,13 @@ public class Clothes {
 	
 	@NotNull
 	@NonNull
-	@Column(nullable = false, insertable = false, updatable = false)
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Collection collection;
 	
 	@NotNull
 	@NonNull
-	@Column(nullable = false, insertable = false, updatable = false)
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Category category;
 	
@@ -90,7 +90,7 @@ public class Clothes {
 	@NonNull
 	@NotNull
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ClosetwsApplication.DATE_PATTERN, locale ="es_ES")
-	@Column(name = "last_use",nullable = false)
+	@Column(name = "last_use")
 	@Temporal(TemporalType.DATE)
 	private Date lastUse;
 	
