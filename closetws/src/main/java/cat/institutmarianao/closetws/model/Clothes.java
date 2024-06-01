@@ -67,7 +67,7 @@ public class Clothes {
 	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
-	@Column(columnDefinition = "BLOB")
+	@Column(columnDefinition = "BLOB",nullable = false)
 	private byte[] picture;
 	
 	@NotNull
