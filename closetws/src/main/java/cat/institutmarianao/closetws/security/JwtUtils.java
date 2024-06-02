@@ -28,7 +28,8 @@ public class JwtUtils {
 	@Autowired
 	private MessageSource messageSource;
 	
-	private static final long MAX_TOKEN_DURATION_MILISECONDS=1800000L;
+	//private static final long MAX_TOKEN_DURATION_MILISECONDS=1800000L;
+	private static final long MAX_TOKEN_DURATION_MILISECONDS=7200000L;
 	
 	@Value("${security.jwt.key.private}")
 	private String privateKey;
